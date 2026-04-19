@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Loading...</title></head>
+<body>
+<script>
+  var conditions = [
+    "condition1_amazons_choice.html",
+    "condition2_no_badge.html",
+    "condition3_transparency.html"
+  ];
+  var pid = Math.random().toString(36).substr(2, 8);
+  var assigned = conditions[Math.floor(Math.random() * conditions.length)];
+  window.location.replace(assigned + "?pid=" + pid);
+</script>
+</body>
+</html>
