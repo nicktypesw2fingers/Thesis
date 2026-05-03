@@ -97,15 +97,15 @@ a{color:inherit;text-decoration:none;cursor:pointer;}
 .atc-btn{background:#ffd814;border:1px solid #fcd200;border-radius:20px;padding:8px 18px;font-size:13px;cursor:pointer;font-family:Arial,sans-serif;transition:background 0.1s;display:inline-block;}
 .atc-btn:hover{background:#f7ca00;}
 .atc-btn.done{background:#d4edda;border-color:#28a745;color:#155724;cursor:default;}
-.card-right{width:185px;flex-shrink:0;}
-.buy-box{border:1px solid #ddd;border-radius:4px;padding:12px;font-size:13px;}
-.bb-price{font-size:20px;font-weight:700;margin-bottom:4px;}
-.bb-free{color:#007600;font-size:12px;margin-bottom:3px;}
-.bb-get{font-size:12px;color:#007600;margin-bottom:8px;}
-.bb-btn{background:#ffd814;border:1px solid #fcd200;border-radius:20px;padding:8px 0;font-size:13px;cursor:pointer;font-family:Arial,sans-serif;width:100%;text-align:center;display:block;margin-bottom:6px;}
+.card-right{width:140px;flex-shrink:0;}
+.buy-box{border:1px solid #ddd;border-radius:4px;padding:10px;font-size:12px;}
+.bb-price{font-size:16px;font-weight:700;margin-bottom:4px;}
+.bb-free{color:#007600;font-size:11px;margin-bottom:2px;}
+.bb-get{font-size:11px;color:#007600;margin-bottom:6px;}
+.bb-btn{background:#ffd814;border:1px solid #fcd200;border-radius:20px;padding:6px 0;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;width:100%;text-align:center;display:block;margin-bottom:5px;}
 .bb-btn:hover{background:#f7ca00;}
 .bb-btn.done{background:#d4edda;border-color:#28a745;color:#155724;cursor:default;}
-.bb-later{background:#ffa41c;border:1px solid #e8920c;border-radius:20px;padding:8px 0;font-size:13px;font-family:Arial,sans-serif;width:100%;text-align:center;display:block;cursor:pointer;}
+.bb-later{background:#ffa41c;border:1px solid #e8920c;border-radius:20px;padding:6px 0;font-size:12px;font-family:Arial,sans-serif;width:100%;text-align:center;display:block;cursor:pointer;}
 .sep-label{font-size:12px;color:#565959;border-top:1px solid #ddd;padding:10px 0 6px;margin-bottom:4px;}
 .pagination{text-align:center;padding:20px 0;font-size:13px;}
 .pagination span{display:inline-block;padding:6px 12px;border:1px solid #ddd;border-radius:3px;margin:0 2px;cursor:pointer;background:#fff;}
@@ -455,12 +455,14 @@ function handleChoice(pid){
   var c=document.getElementById('card-'+pid);
   var dt=Date.now()-T0;
   var spct=document.body.scrollHeight>window.innerHeight?Math.round((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100):100;
+  var pid_val=new URLSearchParams(window.location.search).get('pid')||'anonymous';
   log('product_selected',{product_id:pid,name:c.dataset.name,price:c.dataset.price,badge:c.dataset.badge,is_target:(pid==='target'),position:parseInt(c.dataset.position||0),scroll_pct_at_choice:spct,decision_ms:dt,decision_sec:+(dt/1000).toFixed(2)});
-  log('session_complete',{chosen:c.dataset.name,chose_target:(pid==='target'),chose_badged:(c.dataset.badge!=='none'),condition:"3_algorithmically_promoted",total_ms:dt,milestones:Object.keys(_scrollM).map(Number),cards_seen:Object.keys(_seen),full_log:LOG});
-  document.querySelectorAll('.atc-btn[data-for="'+pid+'"]').forEach(function(b){b.textContent='✓ Added';b.classList.add('done');});
-  document.querySelectorAll('.bb-btn[data-for="'+pid+'"]').forEach(function(b){b.textContent='✓ Added';b.classList.add('done');});
-  document.getElementById('mtext').textContent='You selected: '+c.dataset.name+' (€'+c.dataset.price+'). Your response has been recorded.';
-  setTimeout(function(){ window.location.href = 'https://qualtricsxm4x9yhx7r8.qualtrics.com/jfe/form/SV_3dy3RX1hqv4kb6S?condition='+COND+'&pid='+PID+'&choice='+encodeURIComponent(c.dataset.name)+'&chose_target='+(pid==='target')+'&decision_sec='+(dt/1000).toFixed(2); }, 800);
+  log('session_complete',{chosen:c.dataset.name,chose_target:(pid==='target'),chose_badged:(c.dataset.badge!=='none'),condition:"3_algorithmically_promoted",total_ms:dt});
+  document.querySelectorAll('.atc-btn[data-for="'+pid+'"]').forEach(function(b){b.textContent='\u2713 Added';b.classList.add('done');});
+  document.querySelectorAll('.bb-btn[data-for="'+pid+'"]').forEach(function(b){b.textContent='\u2713 Added';b.classList.add('done');});
+  setTimeout(function(){
+    window.location.href = 'https://qualtricsxm4x9yhx7r8.qualtrics.com/jfe/form/SV_3dy3RX1hqv4kb6S?condition=3_algorithmically_promoted&pid='+pid_val+'&choice='+encodeURIComponent(c.dataset.name)+'&chose_target='+(pid==='target')+'&decision_sec='+(dt/1000).toFixed(2);
+  }, 800);
 }
 function closeModal(){document.getElementById('modal').classList.remove('show');}
 log('page_load',{condition:"3_algorithmically_promoted",pid:new URLSearchParams(window.location.search).get("pid")||"anonymous"});
