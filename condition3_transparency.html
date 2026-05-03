@@ -387,7 +387,12 @@ function handleChoice(pid){
   var badge=c?c.dataset.badge:'unknown';
   var dt=Date.now()-T0;
   try{log('product_selected',{product_id:pid,name:name,price:price,badge:badge,is_target:(pid==='target'),decision_ms:dt,decision_sec:+(dt/1000).toFixed(2)});}catch(e){}
-  window.top.location.href='https://qualtricsxm4x9yhx7r8.qualtrics.com/jfe/form/SV_3dy3RX1hqv4kb6S?condition=3_algorithmically_promoted&pid='+pid_val+'&choice='+encodeURIComponent(name)+'&chose_target='+(pid==='target')+'&decision_sec='+(dt/1000).toFixed(2);
+  var url='https://qualtricsxm4x9yhx7r8.qualtrics.com/jfe/form/SV_3dy3RX1hqv4kb6S?condition=3_algorithmically_promoted&pid='+pid_val+'&choice='+encodeURIComponent(name)+'&chose_target='+(pid==='target')+'&decision_sec='+(dt/1000).toFixed(2);
+  // Try all redirect methods in order
+  try{window.parent.postMessage('reio-iframe-test-finished','*');}catch(e){}
+  try{window.top.location.href=url;}catch(e){}
+  try{window.parent.location.href=url;}catch(e){}
+  try{window.location.href=url;}catch(e){}
 }
 function closeModal(){document.getElementById('modal').classList.remove('show');}
 log('page_load',{condition:"3_algorithmically_promoted",pid:new URLSearchParams(window.location.search).get("pid")||"anonymous"});
