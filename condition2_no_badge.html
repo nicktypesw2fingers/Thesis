@@ -380,17 +380,14 @@ window.addEventListener('scroll',function(){
 },{passive:true});
 function handleChoice(pid){
   if(DONE)return;DONE=true;
-  var c=document.getElementById('card-'+pid);
-  var dt=Date.now()-T0;
-  var spct=document.body.scrollHeight>window.innerHeight?Math.round((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100):100;
   var pid_val=new URLSearchParams(window.location.search).get('pid')||'anonymous';
-  log('product_selected',{product_id:pid,name:c.dataset.name,price:c.dataset.price,badge:c.dataset.badge,is_target:(pid==='target'),position:parseInt(c.dataset.position||0),scroll_pct_at_choice:spct,decision_ms:dt,decision_sec:+(dt/1000).toFixed(2)});
-  log('session_complete',{chosen:c.dataset.name,chose_target:(pid==='target'),chose_badged:(c.dataset.badge!=='none'),condition:"2_no_badge",total_ms:dt});
-  document.querySelectorAll('.atc-btn[data-for="'+pid+'"]').forEach(function(b){b.textContent='\u2713 Added';b.classList.add('done');});
-  document.querySelectorAll('.bb-btn[data-for="'+pid+'"]').forEach(function(b){b.textContent='\u2713 Added';b.classList.add('done');});
-  setTimeout(function(){
-    window.location.href = 'https://qualtricsxm4x9yhx7r8.qualtrics.com/jfe/form/SV_3dy3RX1hqv4kb6S?condition=2_no_badge&pid='+pid_val+'&choice='+encodeURIComponent(c.dataset.name)+'&chose_target='+(pid==='target')+'&decision_sec='+(dt/1000).toFixed(2);
-  }, 800);
+  var c=document.getElementById('card-'+pid);
+  var name=c?c.dataset.name:'unknown';
+  var price=c?c.dataset.price:'unknown';
+  var badge=c?c.dataset.badge:'unknown';
+  var dt=Date.now()-T0;
+  try{log('product_selected',{product_id:pid,name:name,price:price,badge:badge,is_target:(pid==='target'),decision_ms:dt,decision_sec:+(dt/1000).toFixed(2)});}catch(e){}
+  window.location.href='https://qualtricsxm4x9yhx7r8.qualtrics.com/jfe/form/SV_3dy3RX1hqv4kb6S?condition=2_no_badge&pid='+pid_val+'&choice='+encodeURIComponent(name)+'&chose_target='+(pid==='target')+'&decision_sec='+(dt/1000).toFixed(2);
 }
 function closeModal(){document.getElementById('modal').classList.remove('show');}
 log('page_load',{condition:"2_no_badge",pid:new URLSearchParams(window.location.search).get("pid")||"anonymous"});
