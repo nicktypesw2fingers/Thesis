@@ -508,9 +508,17 @@ function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()
 window.addEventListener('DOMContentLoaded',function(){
   var grid=document.getElementById('results-list');
   var cards=Array.from(grid.querySelectorAll('.result-card[data-product]'));
-  shuffle(cards);
+  // Separate target from others
+  var target=null, others=[];
+  cards.forEach(function(c){ if(c.dataset.product==='target'){target=c;}else{others.push(c);} });
+  // Shuffle the non-target cards
+  shuffle(others);
+  // Place target randomly in position 1 or 2 (index 0 or 1)
+  var targetPos=Math.floor(Math.random()*2); // 0 or 1
+  others.splice(targetPos,0,target);
+  var finalOrder=others;
   var pos={};
-  cards.forEach(function(c,i){grid.appendChild(c);pos[c.dataset.product]=i+1;c.dataset.position=i+1;});
+  finalOrder.forEach(function(c,i){grid.appendChild(c);pos[c.dataset.product]=i+1;c.dataset.position=i+1;});
   log('cards_displayed',{order:cards.map(function(c){return c.dataset.name;}),target_position:pos['target']});
   cards.forEach(function(c){
     var id=c.dataset.product;
